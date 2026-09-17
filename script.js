@@ -47,120 +47,115 @@ function speakKana(text) {
 
 // Render Study Chart
 function renderChart() {
-  gridEl.innerHTML = '';
-  gojuonData.forEach(item => {
-    const card = document.createElement('div');
-    if (!item.r) {
-      card.className = 'kana-card empty';
-    } else {
-      card.className = 'kana-card';
-      const char = isKatakana ? item.k : item.h;
-      card.innerHTML = `
-        <div class="kana-char">${char}</div>
-        <div class="romaji-label">${item.r}</div>
-      `;
-      card.addEventListener('click', () => speakKana(char));
-    }
-    gridEl.appendChild(card);
-  });
+    gridEl.innerHTML = '';
+    gojuonData.forEach(item => {
+        const card = document.createElement('div');
+        if (!item.r) {
+        card.className = 'kana-card empty';
+        } else {
+        card.className = 'kana-card';
+        const char = isKatakana ? item.k : item.h;
+        card.innerHTML = `
+            <div class="kana-char">${char}</div>
+            <div class="romaji-label">${item.r}</div>
+        `;
+        card.addEventListener('click', () => speakKana(char));
+        }
+        gridEl.appendChild(card);
+    });
 }
 
 // Setup Quiz
 function nextQuizQuestion() {
-  const validItems = gojuonData.filter(i => i.r !== "");
-  currentQuizItem = validItems[Math.floor(Math.random() * validItems.length)];
-  quizQuestion.textContent = isKatakana ? currentQuizItem.k : currentQuizItem.h;
-  quizInput.value = '';
-  quizFeedback.textContent = '';
-  quizFeedback.className = 'feedback';
-  quizInput.focus();
+    const validItems = gojuonData.filter(i => i.r !== "");
+    currentQuizItem = validItems[Math.floor(Math.random() * validItems.length)];
+    quizQuestion.textContent = isKatakana ? currentQuizItem.k : currentQuizItem.h;
+    quizInput.value = '';
+    quizFeedback.textContent = '';
+    quizFeedback.className = 'feedback';
+    quizInput.focus();
 }
 
 function checkQuizAnswer() {
-  if (!currentQuizItem) return;
-  const userAnswer = quizInput.value.trim().toLowerCase();
-  if (userAnswer === currentQuizItem.r) {
-    quizFeedback.textContent = 'Correct! (正解)';
-    quizFeedback.className = 'feedback correct';
-    speakKana(isKatakana ? currentQuizItem.k : currentQuizItem.h);
-    setTimeout(nextQuizQuestion, 1200);
-  } else {
-    quizFeedback.textContent = `Incorrect! Correct answer is: ${currentQuizItem.r}`;
-    quizFeedback.className = 'feedback incorrect';
-  }
+    if (!currentQuizItem) return;
+    const userAnswer = quizInput.value.trim().toLowerCase();
+    if (userAnswer === currentQuizItem.r) {
+        quizFeedback.textContent = 'Correct! (正解)';
+        quizFeedback.className = 'feedback correct';
+        speakKana(isKatakana ? currentQuizItem.k : currentQuizItem.h);
+        setTimeout(nextQuizQuestion, 1200);
+    } else {
+        quizFeedback.textContent = `Incorrect! Correct answer is: ${currentQuizItem.r}`;
+        quizFeedback.className = 'feedback incorrect';
+    }
 }
 
 // Event Listeners
 toggleKanaBtn.addEventListener('click', () => {
-  isKatakana = !isKatakana;
-  toggleKanaBtn.textContent = isKatakana ? 'Switch to Hiragana' : 'Switch to Katakana';
-  renderChart();
-  if (!quizView.classList.contains('hidden')) nextQuizQuestion();
+    isKatakana = !isKatakana;
+    toggleKanaBtn.textContent = isKatakana ? 'Switch to Hiragana' : 'Switch to Katakana';
+    renderChart();
+    if (!quizView.classList.contains('hidden')) nextQuizQuestion();
 });
 
 modeStudyBtn.addEventListener('click', () => {
-  modeStudyBtn.classList.add('active');
-  modeQuizBtn.classList.remove('active');
-  chartView.classList.remove('hidden');
-  quizView.classList.add('hidden');
+    modeStudyBtn.classList.add('active');
+    modeQuizBtn.classList.remove('active');
+    modeLyricsBtn.classList.remove('active'); // ADD
+    
+    chartView.classList.remove('hidden');
+    quizView.classList.add('hidden');
+    lyricsView.classList.add('hidden'); // ADD
 });
 
 modeQuizBtn.addEventListener('click', () => {
-  modeQuizBtn.classList.add('active');
-  modeStudyBtn.classList.remove('active');
-  quizView.classList.remove('hidden');
-  chartView.classList.add('hidden');
-  nextQuizQuestion();
+    modeQuizBtn.classList.add('active');
+    modeStudyBtn.classList.remove('active');
+    modeLyricsBtn.classList.remove('active'); // ADD
+    
+    quizView.classList.remove('hidden');
+    chartView.classList.add('hidden');
+    lyricsView.classList.add('hidden'); // ADD
+    nextQuizQuestion();
 });
 
 quizSubmit.addEventListener('click', checkQuizAnswer);
 quizInput.addEventListener('keypress', (e) => {
-  if (e.key === 'Enter') checkQuizAnswer();
+    if (e.key === 'Enter') checkQuizAnswer();
 });
 
 modeLyricsBtn.addEventListener('click', () => {
-  // Update button active styles
-  modeLyricsBtn.classList.add('active');
-  modeStudyBtn.classList.remove('active');
-  modeQuizBtn.classList.remove('active');
+    modeLyricsBtn.classList.add('active');
+    modeStudyBtn.classList.remove('active');
+    modeQuizBtn.classList.remove('active');
 
-  // Display only lyrics view
-  lyricsView.classList.remove('hidden');
-  chartView.classList.add('hidden');
-  quizView.classList.add('hidden');
-});
-// Update Existing Mode Buttons to Hide Lyrics View
-modeStudyBtn.addEventListener('click', () => {
-  modeLyricsBtn.classList.remove('active');
-  lyricsView.classList.add('hidden');
-});
-
-modeQuizBtn.addEventListener('click', () => {
-  modeLyricsBtn.classList.remove('active');
-  lyricsView.classList.add('hidden');
+    lyricsView.classList.remove('hidden');
+    chartView.classList.add('hidden');
+    quizView.classList.add('hidden');
 });
 
 // Copy formatted output for student submission
 copySubmissionBtn.addEventListener('click', () => {
-  const japaneseText = lyricsJapanese.value.trim();
-  const romajiText = lyricsRomaji.value.trim();
+    const japaneseText = lyricsJapanese.value.trim();
+    const romajiText = lyricsRomaji.value.trim();
 
-  if (!japaneseText || !romajiText) {
-    lyricsStatus.style.color = '#e74c3c';
-    lyricsStatus.textContent = 'Please fill in both Japanese and Romaji fields before copying.';
-    return;
-  }
+    if (!japaneseText || !romajiText) {
+        lyricsStatus.style.color = '#e74c3c';
+        lyricsStatus.textContent = 'Please fill in both Japanese and Romaji fields before copying.';
+        return;
+    }
 
-  const formattedOutput = `--- Student Lyrics Submission ---\n\n[Japanese Lyrics]\n${japaneseText}\n\n[Romaji Answer]\n${romajiText}`;
+    const formattedOutput = `--- Student Lyrics Submission ---\n\n[Japanese Lyrics]\n${japaneseText}\n\n[Romaji Answer]\n${romajiText}`;
 
-  navigator.clipboard.writeText(formattedOutput).then(() => {
-    lyricsStatus.style.color = '#27ae60';
-    lyricsStatus.textContent = 'Copied to clipboard! Ready to send to teacher.';
-    setTimeout(() => { lyricsStatus.textContent = ''; }, 3000);
-  }).catch(() => {
-    lyricsStatus.style.color = '#e74c3c';
-    lyricsStatus.textContent = 'Failed to copy automatically. Please copy manually.';
-  });
+    navigator.clipboard.writeText(formattedOutput).then(() => {
+        lyricsStatus.style.color = '#27ae60';
+        lyricsStatus.textContent = 'Copied to clipboard! Ready to send to teacher.';
+        setTimeout(() => { lyricsStatus.textContent = ''; }, 3000);
+    }).catch(() => {
+        lyricsStatus.style.color = '#e74c3c';
+        lyricsStatus.textContent = 'Failed to copy automatically. Please copy manually.';
+    });
 });
+
 // Initialize App
 renderChart();
