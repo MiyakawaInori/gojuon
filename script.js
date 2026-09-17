@@ -30,6 +30,12 @@ const quizInput = document.getElementById('quiz-input');
 const quizSubmit = document.getElementById('quiz-submit');
 const quizFeedback = document.getElementById('quiz-feedback');
 
+const modeLyricsBtn = document.getElementById('mode-lyrics');
+const lyricsView = document.getElementById('lyrics-view');
+const lyricsJapanese = document.getElementById('lyrics-japanese');
+const lyricsRomaji = document.getElementById('lyrics-romaji');
+const copySubmissionBtn = document.getElementById('copy-submission');
+const lyricsStatus = document.getElementById('lyrics-status');
 // Speech Synthesis for Audio
 function speakKana(text) {
   if ('speechSynthesis' in window) {
@@ -112,5 +118,49 @@ quizInput.addEventListener('keypress', (e) => {
   if (e.key === 'Enter') checkQuizAnswer();
 });
 
+modeLyricsBtn.addEventListener('click', () => {
+  // Update button active styles
+  modeLyricsBtn.classList.add('active');
+  modeStudyBtn.classList.remove('active');
+  modeQuizBtn.classList.remove('active');
+
+  // Display only lyrics view
+  lyricsView.classList.remove('hidden');
+  chartView.classList.add('hidden');
+  quizView.classList.add('hidden');
+});
+// Update Existing Mode Buttons to Hide Lyrics View
+modeStudyBtn.addEventListener('click', () => {
+  modeLyricsBtn.classList.remove('active');
+  lyricsView.classList.add('hidden');
+});
+
+modeQuizBtn.addEventListener('click', () => {
+  modeLyricsBtn.classList.remove('active');
+  lyricsView.classList.add('hidden');
+});
+
+// Copy formatted output for student submission
+copySubmissionBtn.addEventListener('click', () => {
+  const japaneseText = lyricsJapanese.value.trim();
+  const romajiText = lyricsRomaji.value.trim();
+
+  if (!japaneseText || !romajiText) {
+    lyricsStatus.style.color = '#e74c3c';
+    lyricsStatus.textContent = 'Please fill in both Japanese and Romaji fields before copying.';
+    return;
+  }
+
+  const formattedOutput = `--- Student Lyrics Submission ---\n\n[Japanese Lyrics]\n${japaneseText}\n\n[Romaji Answer]\n${romajiText}`;
+
+  navigator.clipboard.writeText(formattedOutput).then(() => {
+    lyricsStatus.style.color = '#27ae60';
+    lyricsStatus.textContent = 'Copied to clipboard! Ready to send to teacher.';
+    setTimeout(() => { lyricsStatus.textContent = ''; }, 3000);
+  }).catch(() => {
+    lyricsStatus.style.color = '#e74c3c';
+    lyricsStatus.textContent = 'Failed to copy automatically. Please copy manually.';
+  });
+});
 // Initialize App
 renderChart();

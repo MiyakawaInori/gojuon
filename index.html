@@ -12,28 +12,62 @@
     
     <!-- Navigation / Mode Selector -->
     <div class="controls">
-      <button id="mode-study" class="active">Study Chart</button>
-      <button id="mode-quiz">Quiz Mode</button>
-      <button id="toggle-kana">Switch to Katakana</button>
+        <button id="mode-study" class="active">Study Chart</button>
+        <button id="mode-quiz">Quiz Mode</button>
+        <button id="mode-lyrics">Lyrics Practice</button>
+        <button id="toggle-kana">Switch to Katakana</button>
     </div>
 
     <!-- Study Chart View -->
     <div id="chart-view" class="view">
-      <div id="gojuon-grid" class="grid"></div>
+        <div id="gojuon-grid" class="grid"></div>
     </div>
 
     <!-- Quiz Mode View -->
     <div id="quiz-view" class="view hidden">
-      <div class="quiz-card">
-        <div id="quiz-question" class="question-kana">あ</div>
-        <p class="quiz-instruction">Type the Romaji or select the correct answer:</p>
-        <input type="text" id="quiz-input" placeholder="e.g. a" autocomplete="off" />
-        <button id="quiz-submit">Check Answer</button>
-        <div id="quiz-feedback" class="feedback"></div>
+        <div class="quiz-card">
+            <div id="quiz-question" class="question-kana">あ</div>
+            <p class="quiz-instruction">Type the Romaji or select the correct answer:</p>
+            <input type="text" id="quiz-input" placeholder="e.g. a" autocomplete="off" />
+            <button id="quiz-submit">Check Answer</button>
+            <div id="quiz-feedback" class="feedback"></div>
       </div>
     </div>
   </div>
+  
+    <div id="lyrics-view" class="view hidden">
+        <div class="lyrics-card">
+            <h2>Song Lyrics Romaji Practice</h2>
+            <p class="instruction-text">
+            Find 5 Japanese sentences/lines from your favorite song and paste them below. Write your corresponding Romaji for each line in the second box.
+            </p>
+            <div class="lyrics-form">
+                <div class="input-group">
+                    <label for="lyrics-japanese">Japanese Lyrics (5 Lines):</label>
+                    <textarea id="lyrics-japanese" rows="6" placeholder="Paste 5 Japanese sentences here...
+                    e.g.
+                    ワタシの証明は私 (また生まれ変わっても)
+                    君と生きる私 (響きあうハーモニー)
+                    永遠の銀河で (幾度すれ違っても)
+                    また君と出逢いたい"></textarea>
+                </div>
+                <div class="input-group">
+                    <label for="lyrics-romaji">Your Romaji Answer:</label>
+                    <textarea id="lyrics-romaji" rows="6" placeholder="Write your Romaji conversion here...
+                    e.g.
+                    wa ta shi no a ka shi ha wa ta shi (ma ta u ma re ka wa tte mo)
+                    ki mi to i ki ru wa ta shi (hi bi ki a u ha- mo ni-)
+                    to wa no gi n ga de (i ku do su re chi ga tte mo)
+                    ma ta ki mi to de a i ta i"></textarea>
+                </div></div>
 
+    <div class="lyrics-actions">
+      <button id="copy-submission" class="primary-btn">Copy Submission for Teacher</button>
+      <div id="lyrics-status" class="status-msg"></div>
+    </div>
+  </div>
+</div>
+        
   <script src="script.js"></script>
 </body>
 </html>

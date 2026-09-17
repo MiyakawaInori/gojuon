@@ -140,3 +140,74 @@ button:hover, button.active {
 
 .feedback.correct { color: #27ae60; }
 .feedback.incorrect { color: #e74c3c; }
+
+
+/* Lyrics Mode Styling */
+.lyrics-card {
+  background: #fafafa;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 25px;
+  text-align: left;
+}
+
+.lyrics-card h2 {
+  color: #2c3e50;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.instruction-text {
+  font-size: 0.95rem;
+  color: #666;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.lyrics-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.input-group label {
+  display: block;
+  font-weight: 600;
+  color: #34495e;
+  margin-bottom: 8px;
+}
+
+.input-group textarea {
+  width: 100%;
+  padding: 12px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.input-group textarea:focus {
+  border-color: #3498db;
+  outline: none;
+}
+
+.lyrics-actions {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.primary-btn {
+  background: #3498db;
+  color: white;
+  padding: 12px 24px;
+  font-size: 1rem;
+}
+
+.status-msg {
+  margin-top: 10px;
+  font-weight: 600;
+  color: #27ae60;
+  min-height: 20px;
+}
