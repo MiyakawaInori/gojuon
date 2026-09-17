@@ -1,0 +1,142 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background-color: #f4f7f6;
+  color: #333;
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.container {
+  max-width: 800px;
+  width: 100%;
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  text-align: center;
+}
+
+h1 {
+  margin-bottom: 20px;
+  color: #2c3e50;
+}
+
+.controls {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+}
+
+button {
+  padding: 10px 18px;
+  border: 1px solid #3498db;
+  background: white;
+  color: #3498db;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+button:hover, button.active {
+  background: #3498db;
+  color: white;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* Grid Styles */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+}
+
+.kana-card {
+  background: #fafafa;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 15px 5px;
+  cursor: pointer;
+  transition: transform 0.1s ease, border-color 0.2s ease;
+}
+
+.kana-card:hover {
+  transform: translateY(-2px);
+  border-color: #3498db;
+  background: #ebf5fb;
+}
+
+.kana-card.empty {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.kana-char {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.romaji-label {
+  font-size: 0.85rem;
+  color: #7f8c8d;
+  margin-top: 4px;
+}
+
+/* Quiz Styles */
+.quiz-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 40px 20px;
+  background: #fafafa;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.question-kana {
+  font-size: 5rem;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 15px;
+}
+
+.quiz-instruction {
+  margin-bottom: 15px;
+  color: #666;
+}
+
+#quiz-input {
+  width: 80%;
+  padding: 10px;
+  font-size: 1.1rem;
+  text-align: center;
+  border: 2px solid #ccc;
+  border-radius: 6px;
+  margin-bottom: 15px;
+}
+
+#quiz-input:focus {
+  border-color: #3498db;
+  outline: none;
+}
+
+.feedback {
+  font-weight: bold;
+  margin-top: 10px;
+  min-height: 24px;
+}
+
+.feedback.correct { color: #27ae60; }
+.feedback.incorrect { color: #e74c3c; }

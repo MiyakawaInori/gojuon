@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>五十音 (Gojuon) Practice App</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>五十音 (Gojuon) Practice</h1>
+    
+    <!-- Navigation / Mode Selector -->
+    <div class="controls">
+      <button id="mode-study" class="active">Study Chart</button>
+      <button id="mode-quiz">Quiz Mode</button>
+      <button id="toggle-kana">Switch to Katakana</button>
+    </div>
+
+    <!-- Study Chart View -->
+    <div id="chart-view" class="view">
+      <div id="gojuon-grid" class="grid"></div>
+    </div>
+
+    <!-- Quiz Mode View -->
+    <div id="quiz-view" class="view hidden">
+      <div class="quiz-card">
+        <div id="quiz-question" class="question-kana">あ</div>
+        <p class="quiz-instruction">Type the Romaji or select the correct answer:</p>
+        <input type="text" id="quiz-input" placeholder="e.g. a" autocomplete="off" />
+        <button id="quiz-submit">Check Answer</button>
+        <div id="quiz-feedback" class="feedback"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
