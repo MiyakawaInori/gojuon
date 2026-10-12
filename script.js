@@ -30,8 +30,7 @@ const gojuonRows = [
 // App State
 let isKatakana = false;
 let currentQuizItem = null;
-let currentQuizPrompt = "";
-let currentQuizAnswer = "";
+let currentQuizKana = "";
 
 // DOM Elements
 const gridEl = document.getElementById('gojuon-grid');
@@ -100,7 +99,7 @@ function renderRowCheckboxes() {
   });
 }
 
-// Quiz Mechanics (Kana to Kana matching)
+// Quiz Mechanics
 function nextQuizQuestion() {
   const checkedRowBoxes = rowCheckboxesEl.querySelectorAll('input[type="checkbox"]:checked');
   
@@ -133,25 +132,14 @@ function nextQuizQuestion() {
 
   const selectedScript = scriptModeSelect.value;
   if (selectedScript === "hiragana") {
-    // Show Hiragana, user types Katakana
-    currentQuizPrompt = currentQuizItem.h;
-    currentQuizAnswer = currentQuizItem.k;
+    currentQuizKana = currentQuizItem.h;
   } else if (selectedScript === "katakana") {
-    // Show Katakana, user types Hiragana
-    currentQuizPrompt = currentQuizItem.k;
-    currentQuizAnswer = currentQuizItem.h;
+    currentQuizKana = currentQuizItem.k;
   } else if (selectedScript === "mixed") {
-    // Randomly pick direction
-    if (Math.random() < 0.5) {
-      currentQuizPrompt = currentQuizItem.h;
-      currentQuizAnswer = currentQuizItem.k;
-    } else {
-      currentQuizPrompt = currentQuizItem.k;
-      currentQuizAnswer = currentQuizItem.h;
-    }
+    currentQuizKana = Math.random() < 0.5 ? currentQuizItem.h : currentQuizItem.k;
   }
 
-  quizQuestion.textContent = currentQuizPrompt;
+  quizQuestion.textContent = currentQuizKana;
   quizInput.value = '';
   quizFeedback.textContent = '';
   quizFeedback.className = 'feedback';
@@ -160,13 +148,13 @@ function nextQuizQuestion() {
 
 function checkQuizAnswer() {
   if (!currentQuizItem) return;
-  const userAnswer = quizInput.value.trim();
-  if (userAnswer === currentQuizAnswer) {
+  const userAnswer = quizInput.value.trim().toLowerCase();
+  if (userAnswer === currentQuizItem.r) {
     quizFeedback.textContent = 'Correct! (正解)';
     quizFeedback.className = 'feedback correct';
     setTimeout(nextQuizQuestion, 1200);
   } else {
-    quizFeedback.textContent = `Incorrect! Correct answer: ${currentQuizAnswer}`;
+    quizFeedback.textContent = `Incorrect! Correct answer: ${currentQuizItem.r}`;
     quizFeedback.className = 'feedback incorrect';
   }
 }
