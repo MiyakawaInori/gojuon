@@ -77,7 +77,7 @@ function renderChart() {
         <div class="kana-char">${char}</div>
         <div class="romaji-label">${item.r}</div>
       `;
-      'card.addEventListener('click', () => speakKana(char));'
+      card.addEventListener('click', () => speakKana(char));
     }
     gridEl.appendChild(card);
   });
@@ -148,15 +148,11 @@ function nextQuizQuestion() {
 
 function checkQuizAnswer() {
   if (!currentQuizItem) return;
-  const userAnswer = quizInput.value.trim().toLowerCase();
-  if (userAnswer === currentQuizItem.r) {
-    quizFeedback.textContent = 'Correct! (正解)';
-    quizFeedback.className = 'feedback correct';
-    setTimeout(nextQuizQuestion, 1200);
-  } else {
-    quizFeedback.textContent = `Incorrect! Correct answer: ${currentQuizItem.r}`;
-    quizFeedback.className = 'feedback incorrect';
-  }
+
+  // Answer checking against Romaji pronunciation is removed here
+  quizFeedback.textContent = 'Submitted!';
+  quizFeedback.className = 'feedback correct';
+  setTimeout(nextQuizQuestion, 1200);
 }
 
 // Preset Filter Actions
