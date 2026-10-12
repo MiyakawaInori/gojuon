@@ -142,7 +142,6 @@ function checkQuizAnswer() {
   if (userAnswer === currentQuizItem.r) {
     quizFeedback.textContent = 'Correct! (正解)';
     quizFeedback.className = 'feedback correct';
-    // Removed audio pronunciation call here
     setTimeout(nextQuizQuestion, 1200);
   } else {
     quizFeedback.textContent = `Incorrect! Correct answer: ${currentQuizItem.r}`;
