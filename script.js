@@ -30,17 +30,18 @@ const gojuonRows = [
 // App State
 let isKatakana = false;
 let currentQuizItem = null;
-let currentQuizPrompt = "";
-let currentQuizAnswer = "";
+let currentQuizKana = "";
 
 // DOM Elements
 const gridEl = document.getElementById('gojuon-grid');
 const toggleKanaBtn = document.getElementById('toggle-kana');
 const modeStudyBtn = document.getElementById('mode-study');
 const modeQuizBtn = document.getElementById('mode-quiz');
+const modeLyricsBtn = document.getElementById('mode-lyrics');
 
 const chartView = document.getElementById('chart-view');
 const quizView = document.getElementById('quiz-view');
+const lyricsView = document.getElementById('lyrics-view');
 const scriptSelectorContainer = document.getElementById('script-selector-container');
 const scriptModeSelect = document.getElementById('script-mode-select');
 
@@ -55,7 +56,13 @@ const quizInput = document.getElementById('quiz-input');
 const quizSubmit = document.getElementById('quiz-submit');
 const quizFeedback = document.getElementById('quiz-feedback');
 
-// Speech Synthesis (Used ONLY in Study Chart)
+// Lyrics Mode Elements
+const lyricsJapanese = document.getElementById('lyrics-japanese');
+const lyricsRomaji = document.getElementById('lyrics-romaji');
+const copySubmissionBtn = document.getElementById('copy-submission');
+const lyricsStatus = document.getElementById('lyrics-status');
+
+// Speech Synthesis
 function speakKana(text) {
   if ('speechSynthesis' in window && text) {
     const utterance = new SpeechSynthesisUtterance(text);
@@ -100,13 +107,12 @@ function renderRowCheckboxes() {
   });
 }
 
-// Quiz Mechanics (Kana to Kana matching)
+// Quiz Mechanics
 function nextQuizQuestion() {
   const checkedRowBoxes = rowCheckboxesEl.querySelectorAll('input[type="checkbox"]:checked');
   
   if (checkedRowBoxes.length === 0) {
     quizQuestion.textContent = "⚠️";
-    quizInput.value = "";
     quizFeedback.textContent = 'Please select at least one row above!';
     quizFeedback.className = 'feedback incorrect';
     currentQuizItem = null;
@@ -119,39 +125,19 @@ function nextQuizQuestion() {
     activeIndices = activeIndices.concat(gojuonRows[rowIndex].indices);
   });
 
-  if (activeIndices.length === 0) {
-    quizQuestion.textContent = "⚠️";
-    quizInput.value = "";
-    quizFeedback.textContent = 'Please select at least one row above!';
-    quizFeedback.className = 'feedback incorrect';
-    currentQuizItem = null;
-    return;
-  }
-
   const randomIndex = activeIndices[Math.floor(Math.random() * activeIndices.length)];
   currentQuizItem = gojuonData[randomIndex];
 
   const selectedScript = scriptModeSelect.value;
   if (selectedScript === "hiragana") {
-    // Show Hiragana, user types Katakana
-    currentQuizPrompt = currentQuizItem.h;
-    currentQuizAnswer = currentQuizItem.k;
+    currentQuizKana = currentQuizItem.h;
   } else if (selectedScript === "katakana") {
-    // Show Katakana, user types Hiragana
-    currentQuizPrompt = currentQuizItem.k;
-    currentQuizAnswer = currentQuizItem.h;
+    currentQuizKana = currentQuizItem.k;
   } else if (selectedScript === "mixed") {
-    // Randomly pick direction
-    if (Math.random() < 0.5) {
-      currentQuizPrompt = currentQuizItem.h;
-      currentQuizAnswer = currentQuizItem.k;
-    } else {
-      currentQuizPrompt = currentQuizItem.k;
-      currentQuizAnswer = currentQuizItem.h;
-    }
+    currentQuizKana = Math.random() < 0.5 ? currentQuizItem.h : currentQuizItem.k;
   }
 
-  quizQuestion.textContent = currentQuizPrompt;
+  quizQuestion.textContent = currentQuizKana;
   quizInput.value = '';
   quizFeedback.textContent = '';
   quizFeedback.className = 'feedback';
@@ -160,13 +146,14 @@ function nextQuizQuestion() {
 
 function checkQuizAnswer() {
   if (!currentQuizItem) return;
-  const userAnswer = quizInput.value.trim();
-  if (userAnswer === currentQuizAnswer) {
+  const userAnswer = quizInput.value.trim().toLowerCase();
+  if (userAnswer === currentQuizItem.r) {
     quizFeedback.textContent = 'Correct! (正解)';
     quizFeedback.className = 'feedback correct';
+    speakKana(currentQuizKana);
     setTimeout(nextQuizQuestion, 1200);
   } else {
-    quizFeedback.textContent = `Incorrect! Correct answer: ${currentQuizAnswer}`;
+    quizFeedback.textContent = `Incorrect! Correct answer: ${currentQuizItem.r}`;
     quizFeedback.className = 'feedback incorrect';
   }
 }
@@ -189,31 +176,39 @@ presetVowelsBtn.addEventListener('click', () => {
   if (!quizView.classList.contains('hidden')) nextQuizQuestion();
 });
 
-// Listen for checkbox changes with event delegation on the container
-rowCheckboxesEl.addEventListener('change', () => {
-  if (!quizView.classList.contains('hidden')) {
-    nextQuizQuestion();
-  }
-});
-
 // Navigation Mode Switchers
 modeStudyBtn.addEventListener('click', () => {
   modeStudyBtn.classList.add('active');
   modeQuizBtn.classList.remove('active');
+  modeLyricsBtn.classList.remove('active');
 
   chartView.classList.remove('hidden');
   quizView.classList.add('hidden');
+  lyricsView.classList.add('hidden');
   scriptSelectorContainer.classList.add('hidden');
 });
 
 modeQuizBtn.addEventListener('click', () => {
   modeQuizBtn.classList.add('active');
   modeStudyBtn.classList.remove('active');
+  modeLyricsBtn.classList.remove('active');
 
   quizView.classList.remove('hidden');
   chartView.classList.add('hidden');
+  lyricsView.classList.add('hidden');
   scriptSelectorContainer.classList.remove('hidden');
   nextQuizQuestion();
+});
+
+modeLyricsBtn.addEventListener('click', () => {
+  modeLyricsBtn.classList.add('active');
+  modeStudyBtn.classList.remove('active');
+  modeQuizBtn.classList.remove('active');
+
+  lyricsView.classList.remove('hidden');
+  chartView.classList.add('hidden');
+  quizView.classList.add('hidden');
+  scriptSelectorContainer.classList.add('hidden');
 });
 
 // Toggle Kana Button
@@ -234,6 +229,29 @@ scriptModeSelect.addEventListener('change', () => {
 quizSubmit.addEventListener('click', checkQuizAnswer);
 quizInput.addEventListener('keypress', (e) => {
   if (e.key === 'Enter') checkQuizAnswer();
+});
+
+// Lyrics Copy Submission Listener
+copySubmissionBtn.addEventListener('click', () => {
+  const japaneseText = lyricsJapanese.value.trim();
+  const romajiText = lyricsRomaji.value.trim();
+
+  if (!japaneseText || !romajiText) {
+    lyricsStatus.style.color = '#e74c3c';
+    lyricsStatus.textContent = 'Please fill in both Japanese and Romaji fields before copying.';
+    return;
+  }
+
+  const formattedOutput = `--- Student Lyrics Submission ---\n\n[Japanese Lyrics]\n${japaneseText}\n\n[Romaji Answer]\n${romajiText}`;
+
+  navigator.clipboard.writeText(formattedOutput).then(() => {
+    lyricsStatus.style.color = '#27ae60';
+    lyricsStatus.textContent = 'Copied to clipboard! Ready to send to teacher.';
+    setTimeout(() => { lyricsStatus.textContent = ''; }, 3000);
+  }).catch(() => {
+    lyricsStatus.style.color = '#e74c3c';
+    lyricsStatus.textContent = 'Failed to copy automatically. Please copy manually.';
+  });
 });
 
 // App Initialization
