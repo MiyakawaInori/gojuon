@@ -28,11 +28,12 @@ h1 {
   color: #2c3e50;
 }
 
+/* Controls & Buttons */
 .controls {
   display: flex;
   gap: 10px;
   justify-content: center;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
   flex-wrap: wrap;
 }
 
@@ -52,11 +53,44 @@ button:hover, button.active {
   color: white;
 }
 
+.small-btn {
+  padding: 6px 12px;
+  font-size: 0.85rem;
+}
+
+.primary-btn {
+  background: #3498db;
+  color: white;
+  padding: 12px 24px;
+  font-size: 1rem;
+}
+
+.primary-btn:hover {
+  background: #2980b9;
+}
+
 .hidden {
   display: none !important;
 }
 
-/* Grid Styles */
+/* Script Selector Dropdown */
+.script-selector {
+  background: #eef7fc;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.script-selector select {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 0.95rem;
+  background: white;
+  cursor: pointer;
+}
+
+/* 1. Study Chart View */
 .grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
@@ -95,13 +129,63 @@ button:hover, button.active {
   margin-top: 4px;
 }
 
-/* Quiz Styles */
+/* 2. Quiz View & Filters */
+.filter-container {
+  background: #fafafa;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.filter-container h3 {
+  font-size: 1rem;
+  color: #2c3e50;
+  margin-bottom: 12px;
+}
+
+.preset-buttons {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+}
+
+.row-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 10px;
+}
+
+.row-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: white;
+  border: 1px solid #dcdfe6;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.row-item:hover {
+  background: #ebf5fb;
+  border-color: #3498db;
+}
+
+.row-item input {
+  cursor: pointer;
+}
+
 .quiz-card {
   border: 1px solid #e0e0e0;
   border-radius: 10px;
   padding: 40px 20px;
   background: #fafafa;
-  max-width: 400px;
+  max-width: 450px;
   margin: 0 auto;
 }
 
@@ -141,8 +225,7 @@ button:hover, button.active {
 .feedback.correct { color: #27ae60; }
 .feedback.incorrect { color: #e74c3c; }
 
-
-/* Lyrics Mode Styling */
+/* 3. Lyrics Practice View */
 .lyrics-card {
   background: #fafafa;
   border: 1px solid #e0e0e0;
@@ -198,16 +281,8 @@ button:hover, button.active {
   text-align: center;
 }
 
-.primary-btn {
-  background: #3498db;
-  color: white;
-  padding: 12px 24px;
-  font-size: 1rem;
-}
-
 .status-msg {
   margin-top: 10px;
   font-weight: 600;
-  color: #27ae60;
   min-height: 20px;
 }
