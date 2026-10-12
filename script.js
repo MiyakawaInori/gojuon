@@ -105,6 +105,7 @@ function nextQuizQuestion() {
   
   if (checkedRowBoxes.length === 0) {
     quizQuestion.textContent = "⚠️";
+    quizInput.value = "";
     quizFeedback.textContent = 'Please select at least one row above!';
     quizFeedback.className = 'feedback incorrect';
     currentQuizItem = null;
@@ -116,6 +117,15 @@ function nextQuizQuestion() {
     const rowIndex = parseInt(cb.value);
     activeIndices = activeIndices.concat(gojuonRows[rowIndex].indices);
   });
+
+  if (activeIndices.length === 0) {
+    quizQuestion.textContent = "⚠️";
+    quizInput.value = "";
+    quizFeedback.textContent = 'Please select at least one row above!';
+    quizFeedback.className = 'feedback incorrect';
+    currentQuizItem = null;
+    return;
+  }
 
   const randomIndex = activeIndices[Math.floor(Math.random() * activeIndices.length)];
   currentQuizItem = gojuonData[randomIndex];
@@ -167,7 +177,7 @@ presetVowelsBtn.addEventListener('click', () => {
   if (!quizView.classList.contains('hidden')) nextQuizQuestion();
 });
 
-// Listen for checkbox state changes dynamically to update quiz immediately
+// Listen for checkbox changes with event delegation on the container
 rowCheckboxesEl.addEventListener('change', () => {
   if (!quizView.classList.contains('hidden')) {
     nextQuizQuestion();
