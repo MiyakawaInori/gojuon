@@ -77,7 +77,7 @@ function renderChart() {
         <div class="kana-char">${char}</div>
         <div class="romaji-label">${item.r}</div>
       `;
-      card.addEventListener('click', () => speakKana(char));
+      'card.addEventListener('click', () => speakKana(char));'
     }
     gridEl.appendChild(card);
   });
